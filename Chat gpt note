@@ -1,0 +1,91 @@
+Hosting a dynamic content-based site like the one you mentioned on GitHub Pages is not straightforward because GitHub Pages is designed for static content, not server-side applications. You cannot run a server-side script to list directory contents as you would with Node.js in the earlier solution.
+
+However, one way you can approach this with GitHub Pages is to manually list the files in a JSON format and then render them dynamically using JavaScript on the client side.
+
+Here's a simple approach to achieve this:
+
+1. **Prepare your repository**:
+
+Your GitHub repository structure may look something like this:
+
+```
+/my-music-repo
+|-- index.html
+|-- styles.css
+|-- app.js
+|-- songs.json
+|-- song1.mp3
+|-- song2.mp3
+|-- ...
+```
+
+2. **songs.json**:
+
+Manually list your songs:
+
+```json
+[
+    "song1.mp3",
+    "song2.mp3",
+    ...
+]
+```
+
+3. **index.html**:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <input type="text" id="searchBar" placeholder="Search for a song...">
+    <ul id="songList"></ul>
+    <audio id="audio" controls></audio>
+    
+    <script src="app.js"></script>
+</body>
+</html>
+```
+
+4. **app.js**:
+
+```javascript
+window.onload = async () => {
+    const response = await fetch('songs.json');
+    const songs = await response.json();
+    
+    const songList = document.getElementById('songList');
+    songs.forEach(song => {
+        const listItem = document.createElement('li');
+        listItem.innerText = song;
+        listItem.onclick = () => playSong(song);
+        songList.appendChild(listItem);
+    });
+};
+
+function playSong(song) {
+    const audio = document.getElementById('audio');
+    audio.src = song;
+    audio.play();
+}
+```
+
+5. **styles.css**:
+
+You can add custom styling here if needed.
+
+6. **Hosting on GitHub Pages**:
+
+- Push your repository to GitHub.
+- Go to the repository settings.
+- Under the "GitHub Pages" section, choose the main branch (or the branch you're working on).
+- Click Save.
+- After a few minutes, your site should be live at `https://[your-github-username].github.io/my-music-repo/`.
+
+Remember, each time you add a new song, you'd have to update the `songs.json` file manually. This solution is more of a workaround due to the static nature of GitHub Page
+s.
